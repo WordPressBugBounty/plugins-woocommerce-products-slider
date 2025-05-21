@@ -3,9 +3,7 @@
 Plugin Name: Product Slider for WooCommerce by PickPlugins
 Plugin URI: http://pickplugins.com/items/woocommerce-product-slider-for-wordpress/
 Description: Fully responsive and mobile ready Carousel Slider for your WooCommerce product. unlimited slider anywhere via short-codes and easy admin setting.
-Version: 1.13.55
-WC requires at least: 3.0.0
-WC tested up to: 9.1
+Version: 1.13.56
 Author: PickPlugins
 Text Domain: woocommerce-products-slider
 Author URI: http://pickplugins.com
@@ -25,7 +23,7 @@ class WoocommerceProductsSlider
         define('wcps_plugin_url', plugins_url('/', __FILE__));
         define('wcps_plugin_dir', plugin_dir_path(__FILE__));
         define('wcps_plugin_name', 'PickPlugins Product Slider');
-        define('wcps_plugin_version', '1.13.55');
+        define('wcps_plugin_version', '1.13.56');
         define('wcps_server_url', 'https://www.pickplugins.com/demo/woocommerce-products-slider/');
         //define('wcps_server_url', 'http://localhost/wp/');
 
@@ -50,12 +48,20 @@ class WoocommerceProductsSlider
 
         require_once(wcps_plugin_dir . 'includes/3rd-party/3rd-party.php');
 
+        require_once(wcps_plugin_dir . 'includes/functions-rest.php');
+
+
 
         require_once(plugin_dir_path(__FILE__) . 'includes/functions.php');
         require_once(plugin_dir_path(__FILE__) . 'includes/class-functions.php');
         require_once(plugin_dir_path(__FILE__) . 'includes/class-shortcodes.php');
         require_once(plugin_dir_path(__FILE__) . 'includes/class-settings-tabs.php');
 
+        include('includes/functions-builder.php');
+        include('templates/view-grid/index.php');
+        include('templates/view-slider/index.php');
+        include('templates/view-masonry/index.php');
+        include('templates/view-filterable/index.php');
 
         // to work upload button
         add_action('admin_enqueue_scripts', 'wp_enqueue_media');
