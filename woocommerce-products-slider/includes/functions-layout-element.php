@@ -118,14 +118,14 @@ function wcps_layout_element_thumbnail($args)
         if ($lazy_load) {
     ?>
             <div class=" <?php echo esc_attr($element_class); ?>">
-                <a href="<?php echo $product_url; ?>">
-                    <img class="slick-loading" alt="<?php echo get_the_title(); ?>" data-splide-lazy="<?php echo esc_url_raw($thumb_image_url); ?>" src="<?php echo esc_url_raw($default_thumb_src); ?>" />
+                <a href="<?php echo esc_url($product_url); ?>">
+                    <img class="slick-loading" alt="<?php echo esc_attr(get_the_title()); ?>" data-splide-lazy="<?php echo esc_url($thumb_image_url); ?>" src="<?php echo esc_url($default_thumb_src); ?>" />
                 </a>
             </div>
         <?php
         } else {
         ?>
-            <div class=" <?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url_raw($product_url); ?>"><?php echo get_the_post_thumbnail($product_id, $thumb_size); ?></a>
+            <div class=" <?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url($product_url); ?>"><?php echo get_the_post_thumbnail($product_id, $thumb_size); ?></a>
             </div>
         <?php
         }
@@ -136,7 +136,7 @@ function wcps_layout_element_thumbnail($args)
         $thumb_image_url = apply_filters('wcps_layout_element_thumbnail_src', $thumb_image_url, $args);
 
         ?>
-        <div class=" <?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url_raw($product_url); ?>"><img class="owl-lazy" data-src="<?php echo esc_url_raw($thumb_image_url); ?>" src="<?php echo esc_url_raw($default_thumb_src); ?>" /></a></div>
+        <div class=" <?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url($product_url); ?>"><img class="owl-lazy" data-src="<?php echo esc_url($thumb_image_url); ?>" src="<?php echo esc_url($default_thumb_src); ?>" /></a></div>
 
     <?php
     }
@@ -325,7 +325,7 @@ function wcps_layout_element_product_category($args)
 
     if (!empty($term_total_count)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $categories_html); ?></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $categories_html); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -381,7 +381,7 @@ function wcps_layout_element_product_tag($args)
 
     if (!empty($term_total_count)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $categories_html); ?></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $categories_html); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -405,7 +405,7 @@ function wcps_layout_element_sale_count($args)
 
     if (!empty($total_sales)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $total_sales); ?></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $total_sales); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -476,7 +476,7 @@ function wcps_layout_element_product_price($args)
 
     if (!empty($price_html)) :
     ?>
-        <div class=" <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $price_html); ?></div>
+        <div class=" <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $price_html); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -509,7 +509,7 @@ function wcps_layout_element_on_sale_mark($args)
 
     if ($is_on_sale && ($product->is_type('simple') || $product->is_type('variable'))) :
     ?>
-        <div class="on-sale <?php echo esc_attr($position); ?> <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $icon); ?></div>
+        <div class="on-sale <?php echo esc_attr($position); ?> <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $icon); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -540,7 +540,7 @@ function wcps_layout_element_featured_mark($args)
 
     if ($is_featured) :
     ?>
-        <div class="featured-mark <?php echo esc_attr($position); ?> <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $icon); ?></div>
+        <div class="featured-mark <?php echo esc_attr($position); ?> <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $icon); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -559,7 +559,7 @@ function wcps_layout_element_product_id($args)
     $wrapper_html = !empty($elementData['wrapper_html']) ? $elementData['wrapper_html'] : '%s';
 
     ?>
-    <div class="featured-mark <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $product_id); ?></div>
+    <div class="featured-mark <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $product_id); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
 
 }
@@ -585,7 +585,7 @@ function wcps_layout_element_rating($args)
 
     if ($average_rating > 0) :
     ?>
-        <div class="woocommerce <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $rating_html); ?></div>
+        <div class="woocommerce <?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $rating_html); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -641,7 +641,7 @@ function wcps_layout_element_term_title($args)
 
 
 ?>
-    <div class="<?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url_raw($term_link); ?>"><?php echo wp_kses_post($term_title); ?></a> </div>
+    <div class="<?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url($term_link); ?>"><?php echo wp_kses_post($term_title); ?></a> </div>
     <?php
 
 }
@@ -673,7 +673,7 @@ function wcps_layout_element_term_thumb($args)
 
     if (!empty($image_url)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url_raw($term_link); ?>"><img src="<?php echo esc_url_raw($image_url); ?>"></a></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><a href="<?php echo esc_url($term_link); ?>"><img src="<?php echo esc_url($image_url); ?>"></a></div>
     <?php
     endif;
 }
@@ -717,7 +717,7 @@ function wcps_layout_element_term_post_count($args)
 
 
 ?>
-    <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $term_count); ?></div>
+    <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $term_count); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 <?php
 
 }
@@ -745,7 +745,7 @@ function wcps_layout_element_order_date($args)
     $element_class = !empty($element_index) ? 'element-order_date element-' . $element_index : 'element-order_date';
 
 ?>
-    <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $post_date); ?></div>
+    <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $post_date); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 
 <?php
 
@@ -799,7 +799,7 @@ function wcps_layout_element_order_customer_name($args)
 
     if (!empty($user_data->display_name)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $user_data->display_name); ?></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><?php echo wp_kses_post(sprintf($wrapper_html, esc_html($user_data->display_name))); ?></div>
     <?php
     endif;
 }
@@ -846,7 +846,7 @@ function wcps_layout_element_order_items($args)
 
     if (!empty($product_list)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $product_list); ?></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $product_list); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -885,7 +885,7 @@ function wcps_layout_element_order_total($args)
 
     if (!empty($total)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $currency . $total); ?></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $currency . $total); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -915,7 +915,7 @@ function wcps_layout_element_order_discount_total($args)
 
     if (!empty($discount_total)) :
     ?>
-        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $currency . $discount_total); ?></div>
+        <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $currency . $discount_total); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
     <?php
     endif;
 }
@@ -941,7 +941,7 @@ function wcps_layout_element_order_country($args)
 
 
     ?>
-    <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $billing_country); ?></div>
+    <div class="<?php echo esc_attr($element_class); ?>"><?php echo wp_kses_post(sprintf($wrapper_html, esc_html($billing_country))); ?></div>
 <?php
 
 }
@@ -969,7 +969,7 @@ function wcps_layout_element_order_payment_method($args)
     $element_class = !empty($element_index) ? 'element-order_payment_method element-' . $element_index : 'element-order_payment_method';
 
 ?>
-    <div class="<?php echo esc_attr($element_class); ?>"><?php echo sprintf($wrapper_html, $payment_method_title); ?></div>
+    <div class="<?php echo esc_attr($element_class); ?>"><?php echo wp_kses_post(sprintf($wrapper_html, esc_html($payment_method_title))); ?></div>
 <?php
 
 }
@@ -1176,7 +1176,7 @@ function wcps_layout_element_css_order_customer_thumb($args)
 ?>
     <style>
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
-            <?php if (!empty($width)) : ?>width: <?php echo $width; ?>;
+            <?php if (!empty($width)) : ?>width: <?php echo esc_attr($width); ?>;
             <?php endif; ?><?php if (!empty($font_size)) : ?>font-size: <?php echo esc_attr($font_size); ?>;
             <?php endif; ?><?php if (!empty($font_family)) : ?>font-family: <?php echo esc_attr($font_family); ?>;
             <?php endif; ?><?php if (!empty($margin)) : ?>margin: <?php echo esc_attr($margin); ?>;
@@ -1420,12 +1420,12 @@ function wcps_layout_element_css_product_category($args)
 ?>
     <style>
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
-            margin: <?php echo $wrapper_margin; ?>;
+            margin: <?php echo esc_attr($wrapper_margin); ?>;
         }
 
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index . ' a'); ?> {
             text-decoration: none;
-            <?php if (!empty($link_color)) : ?>color: <?php echo $link_color; ?>;
+            <?php if (!empty($link_color)) : ?>color: <?php echo esc_attr($link_color); ?>;
             <?php endif; ?><?php if (!empty($font_size)) : ?>font-size: <?php echo esc_attr($font_size); ?>;
             <?php endif; ?><?php if (!empty($font_family)) : ?>font-family: <?php echo esc_attr($font_family); ?>;
             <?php endif; ?><?php if (!empty($text_align)) : ?>text-align: <?php echo esc_attr($text_align); ?>;
@@ -1455,13 +1455,13 @@ function wcps_layout_element_css_product_tag($args)
 ?>
     <style>
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
-            <?php if (!empty($wrapper_margin)) : ?>margin: <?php echo $wrapper_margin; ?>;
+            <?php if (!empty($wrapper_margin)) : ?>margin: <?php echo esc_attr($wrapper_margin); ?>;
             <?php endif; ?>
         }
 
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index . ' a'); ?> {
             text-decoration: none;
-            <?php if (!empty($link_color)) : ?>color: <?php echo $link_color; ?>;
+            <?php if (!empty($link_color)) : ?>color: <?php echo esc_attr($link_color); ?>;
             <?php endif; ?><?php if (!empty($font_size)) : ?>font-size: <?php echo esc_attr($font_size); ?>;
             <?php endif; ?><?php if (!empty($font_family)) : ?>font-family: <?php echo esc_attr($font_family); ?>;
             <?php endif; ?>
@@ -1517,10 +1517,10 @@ function wcps_layout_element_css_on_sale_mark($args)
     <style>
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
             line-height: normal;
-            <?php if (!empty($background_color)) : ?>background-color: <?php echo $background_color; ?>;
-            <?php endif; ?><?php if (!empty($text_color)) : ?>color: <?php echo $text_color; ?>;
+            <?php if (!empty($background_color)) : ?>background-color: <?php echo esc_attr($background_color); ?>;
+            <?php endif; ?><?php if (!empty($text_color)) : ?>color: <?php echo esc_attr($text_color); ?>;
             <?php endif; ?><?php if (!empty($font_size)) : ?>font-size: <?php echo esc_attr($font_size); ?>;
-            <?php endif; ?><?php if (!empty($padding)) : ?>padding: <?php echo $padding; ?>;
+            <?php endif; ?><?php if (!empty($padding)) : ?>padding: <?php echo esc_attr($padding); ?>;
             <?php endif; ?>
         }
     </style>
@@ -1546,10 +1546,10 @@ function wcps_layout_element_css_featured_mark($args)
     <style>
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
             line-height: normal;
-            <?php if (!empty($background_color)) : ?>background-color: <?php echo $background_color; ?>;
-            <?php endif; ?><?php if (!empty($text_color)) : ?>color: <?php echo $text_color; ?>;
+            <?php if (!empty($background_color)) : ?>background-color: <?php echo esc_attr($background_color); ?>;
+            <?php endif; ?><?php if (!empty($text_color)) : ?>color: <?php echo esc_attr($text_color); ?>;
             <?php endif; ?><?php if (!empty($font_size)) : ?>font-size: <?php echo esc_attr($font_size); ?>;
-            <?php endif; ?><?php if (!empty($padding)) : ?>padding: <?php echo $padding; ?>;
+            <?php endif; ?><?php if (!empty($padding)) : ?>padding: <?php echo esc_attr($padding); ?>;
             <?php endif; ?>
         }
     </style>
@@ -1577,8 +1577,8 @@ function wcps_layout_element_css_product_id($args)
     <style>
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
             line-height: normal;
-            <?php if (!empty($background_color)) : ?>background-color: <?php echo $background_color; ?>;
-            <?php endif; ?><?php if (!empty($text_color)) : ?>color: <?php echo $text_color; ?>;
+            <?php if (!empty($background_color)) : ?>background-color: <?php echo esc_attr($background_color); ?>;
+            <?php endif; ?><?php if (!empty($text_color)) : ?>color: <?php echo esc_attr($text_color); ?>;
             <?php endif; ?><?php if (!empty($font_size)) : ?>font-size: <?php echo esc_attr($font_size); ?>;
             <?php endif; ?><?php if (!empty($margin)) : ?>padding: <?php echo esc_attr($margin); ?>;
             <?php endif; ?>
@@ -1622,9 +1622,9 @@ function wcps_layout_element_css_add_to_cart($args)
         }
 
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index . ' a'); ?> {
-            <?php if (!empty($background_color)) : ?>background-color: <?php echo $background_color; ?>;
+            <?php if (!empty($background_color)) : ?>background-color: <?php echo esc_attr($background_color); ?>;
             <?php endif; ?><?php if (!empty($color)) : ?>color: <?php echo esc_attr($color); ?>;
-            <?php endif; ?><?php if (!empty($padding)) : ?>padding: <?php echo $padding; ?>;
+            <?php endif; ?><?php if (!empty($padding)) : ?>padding: <?php echo esc_attr($padding); ?>;
             <?php endif; ?>
         }
 
@@ -1637,7 +1637,7 @@ function wcps_layout_element_css_add_to_cart($args)
 
     <?php if ($show_quantity == 'yes') : ?>
         <script>
-            jQuery('.wcps-container-<?php echo $wcps_id; ?> .wcps-items-cart .add_to_cart_button').parent().prepend('<input value=1 class=quantity type=number> ');
+            jQuery('.wcps-container-<?php echo esc_js($wcps_id); ?> .wcps-items-cart .add_to_cart_button').parent().prepend('<input value=1 class=quantity type=number> ');
         </script>
     <?php endif; ?>
 <?php
@@ -1743,7 +1743,7 @@ function wcps_layout_element_css_content($args)
         }
 
         <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index . ' a'); ?> {
-            <?php if (!empty($read_more_color)) : ?>color: <?php echo $read_more_color; ?>;
+            <?php if (!empty($read_more_color)) : ?>color: <?php echo esc_attr($read_more_color); ?>;
             <?php endif; ?>
         }
     </style>
@@ -1779,21 +1779,21 @@ function wcps_layout_element_css_thumbnail($args)
 
         @media only screen and (min-width: 1024px) {
             <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
-                <?php if (!empty($thumb_height_large)) : ?>max-height: <?php echo $thumb_height_large; ?>;
+                <?php if (!empty($thumb_height_large)) : ?>max-height: <?php echo esc_attr($thumb_height_large); ?>;
                 <?php endif; ?>
             }
         }
 
         @media only screen and (min-width: 768px) and (max-width: 1023px) {
             <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
-                <?php if (!empty($thumb_height_medium)) : ?>max-height: <?php echo $thumb_height_medium; ?>;
+                <?php if (!empty($thumb_height_medium)) : ?>max-height: <?php echo esc_attr($thumb_height_medium); ?>;
                 <?php endif; ?>
             }
         }
 
         @media only screen and (min-width: 0px) and (max-width: 767px) {
             <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
-                <?php if (!empty($thumb_height_small)) : ?>max-height: <?php echo $thumb_height_small; ?>;
+                <?php if (!empty($thumb_height_small)) : ?>max-height: <?php echo esc_attr($thumb_height_small); ?>;
                 <?php endif; ?>
             }
         }

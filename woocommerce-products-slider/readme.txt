@@ -3,8 +3,8 @@
 	Donate link: https://pickplugins.com/pickplugins-products-slider/
 	Tags: product slider, woocommerce slider, carousel slider, product category slider, woo slider, carousel slider,  woocommerce product slider
 	Requires at least: 3.8
-	Tested up to: 6.8
-	Stable tag: 1.13.56
+	Tested up to: 6.9
+	Stable tag: 1.13.60
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,9 +18,9 @@ PickPlugins Product Slider is easy and user friendly carousel slider for WooComm
 ### Product Slider for WooCommerce by PickPlugins by http://pickplugins.com
 
 * [Buy Premium !&raquo;](https://pickplugins.com/pickplugins-products-slider/)
-* [See the Live demo !&raquo;](https://www.pickplugins.com/demo/woocommerce-products-slider/)
-* [Support !&raquo;](https://www.pickplugins.com/support/)
-* [Documentation !&raquo;](https://www.pickplugins.com/documentation/woocommerce-products-slider/)
+* [See the Live demo !&raquo;](https://demo.pickplugins.com/woocommerce-products-slider/)
+* [Support !&raquo;](https://pickplugins.com/support/)
+* [Documentation !&raquo;](https://pickplugins.com/documentation/woocommerce-products-slider/)
 
 ###Plugin Features
 
@@ -112,18 +112,18 @@ advance layout elements Stock status, Stock quantity, Product Weight, Product Di
 
 == Installation ==
 
-1. Install as regular WordPress plugin.<br />
-2. Go your plugin setting via WordPress Dashboard and find "<strong>PickPlugins Products Slider</strong>" activate it.<br />
+1. Install as regular WordPress plugin.
+2. Go your plugin setting via WordPress Dashboard and find "PickPlugins Products Slider" activate it.
 
-After activate plugin you will see "WCPS" menu at left side on WordPress dashboard click "New WCPS" and use the options field "PickPlugins Products Slider"<br />
+After activate plugin you will see "WCPS" menu at left side on WordPress dashboard click "New WCPS" and use the options field "PickPlugins Products Slider"
 
-<br />
-<strong>How to use on page or post</strong><br />
-When slider options setup done please publish WCPS as like post or page<br />
 
-and then copy shortcode from top of <strong>PickPlugins Products Slider Options</strong> `[wcps id="1234" ]`<br />
+How to use on page or post
+When slider options setup done please publish WCPS as like post or page
 
-then paste this shortcode anywhere in your page to display slider<br />
+and then copy shortcode from top of PickPlugins Products Slider Options `[wcps id="1234" ]`
+
+then paste this shortcode anywhere in your page to display slider
 
 
 
@@ -141,6 +141,20 @@ then paste this shortcode anywhere in your page to display slider<br />
 
 == Changelog ==
 
+    = 1.13.60 =
+    * 2025-12-18 fix -  Broken Style issue fixed.
+
+    = 1.13.59 =
+    * 2025-12-17 fix -  Escaping issue fixed.
+    * 2025-12-17 fix -  Latest WP compatibility issue checked.
+
+    = 1.13.58 =
+    * 2025-11-13 fix -  Updated template library server URL
+
+    = 1.13.57 =
+    * 2025-06-21 update -  Improved create new view type
+    * 2025-06-21 update -  Improved Builder layout editor
+    * 2025-06-16 update -  Improved Builder style generation
 
     = 1.13.56 =
     * 2025-05-21 update -  Advacned React Based Builder added.

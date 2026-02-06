@@ -6,7 +6,7 @@ add_action('wcps_builder_viewSlider', 'wcps_builder_viewSlider', 5, 2);
 function wcps_builder_viewSlider($post_id, $PostGridData)
 {
 
-    global $PostGridBuilderCss;
+    global $WCPSBuilderCss;
 
 
     $globalOptions = isset($PostGridData["globalOptions"]) ? $PostGridData["globalOptions"] : [];
@@ -47,7 +47,7 @@ function wcps_builder_viewSlider($post_id, $PostGridData)
 
     //var_dump($reponsiveCss);
 
-    $PostGridBuilderCss .= $reponsiveCss;
+    $WCPSBuilderCss .= $reponsiveCss;
 
 
 
@@ -119,54 +119,55 @@ function wcps_builder_viewSlider($post_id, $PostGridData)
 
 
 ?>
-    <div id="<?php echo esc_attr($blockId); ?>" class="splide  " data-splide="<?php echo esc_attr(json_encode($sliderOptions)) ?>" style="<?php echo ($lazyLoad) ? "display: none;" : ""; ?>">
-        <div class="splide__arrows">
-            <div class='prev splide__arrow splide__arrow--prev'>
-                <?php if ($prevIconPosition == 'before') : ?>
-                    <span class='icon'>
-                        <?php echo wp_kses_post($prevIconHtml); ?>
-                    </span>
-                <?php endif; ?>
-                <?php if (!empty($prevText)) : ?>
-                    <span>
-                        <?php echo esc_attr($prevText); ?>
-                    </span>
-                <?php endif; ?>
-                <?php if ($prevIconPosition == 'after') : ?>
-                    <span class='icon'>
-                        <?php echo wp_kses_post($prevIconHtml); ?>
-                    </span>
-                <?php endif; ?>
+    <div id="<?php echo esc_attr($blockId); ?>" style="<?php echo ($lazyLoad) ? "display: none;" : ""; ?>">
+
+        <div class="splide  " id="splide-<?php echo esc_attr($blockId); ?>" data-splide="<?php echo esc_attr(json_encode($sliderOptions)) ?>">
+            <div class="splide__track">
+                <ul class="splide__list items">
+                    <?php
+
+                    echo wp_kses_post($postsHtml);
+                    ?>
+                </ul>
             </div>
-            <div class='next splide__arrow splide__arrow--next'>
-                <?php if ($nextIconPosition == 'before') : ?>
-                    <span class='icon'>
-                        <?php echo wp_kses_post($nextIconHtml); ?>
-                    </span>
-                <?php endif; ?>
-                <?php if (!empty($nextText)) : ?>
-                    <span>
-                        <?php echo esc_attr($nextText); ?>
-                    </span>
-                <?php endif; ?>
-                <?php if ($nextIconPosition == 'after') : ?>
-                    <span class='icon'>
-                        <?php echo wp_kses_post($nextIconHtml); ?>
-                    </span>
-                <?php endif; ?>
+            <div class="splide__arrows">
+                <div class='prev splide__arrow splide__arrow--prev'>
+                    <?php if ($prevIconPosition == 'before') : ?>
+                        <span class='icon'>
+                            <?php echo wp_kses_post($prevIconHtml); ?>
+                        </span>
+                    <?php endif; ?>
+                    <?php if (!empty($prevText)) : ?>
+                        <span>
+                            <?php echo esc_attr($prevText); ?>
+                        </span>
+                    <?php endif; ?>
+                    <?php if ($prevIconPosition == 'after') : ?>
+                        <span class='icon'>
+                            <?php echo wp_kses_post($prevIconHtml); ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+                <div class='next splide__arrow splide__arrow--next'>
+                    <?php if ($nextIconPosition == 'before') : ?>
+                        <span class='icon'>
+                            <?php echo wp_kses_post($nextIconHtml); ?>
+                        </span>
+                    <?php endif; ?>
+                    <?php if (!empty($nextText)) : ?>
+                        <span>
+                            <?php echo esc_attr($nextText); ?>
+                        </span>
+                    <?php endif; ?>
+                    <?php if ($nextIconPosition == 'after') : ?>
+                        <span class='icon'>
+                            <?php echo wp_kses_post($nextIconHtml); ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
             </div>
+            <ul class="splide__pagination "></ul>
         </div>
-        <div class="splide__track">
-            <ul class="splide__list items">
-                <?php
-
-                echo $postsHtml;
-                ?>
-            </ul>
-        </div>
-
-        <ul class="splide__pagination "></ul>
-
     </div>
 
 

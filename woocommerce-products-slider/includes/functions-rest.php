@@ -267,7 +267,7 @@ class WoocommerceProductsSliderRest
 
 		if (empty($postId)) {
 			$response->error = true;
-			$response->errorMessage = __("Post ID should not empty");
+			$response->errorMessage = __("Post ID should not empty", "woocommerce-products-slider");
 			die(wp_json_encode($response));
 		}
 
@@ -275,7 +275,7 @@ class WoocommerceProductsSliderRest
 
 		if ($post->post_type != "wcps") {
 			$response->error = true;
-			$response->errorMessage = __("Post type is not wcps");
+			$response->errorMessage = __("Post type is not wcps", "woocommerce-products-slider");
 			die(wp_json_encode($response));
 		}
 
@@ -312,12 +312,12 @@ class WoocommerceProductsSliderRest
 			if ($new_post_id) {
 				$response->post_title = $post->post_title . ' - Copy of #' . $postId;
 				$response->success = true;
-				$response->successMessage = __("Post created");
+				$response->successMessage = __("Post created", "woocommerce-products-slider");
 			}
 			$response->id = $new_post_id;
 		} else {
 			$response->error = true;
-			$response->errorMessage = __("Post creation failed.");
+			$response->errorMessage = __("Post creation failed.", "woocommerce-products-slider");
 		}
 
 
@@ -342,7 +342,7 @@ class WoocommerceProductsSliderRest
 
 		if (empty($postId)) {
 			$response->error = true;
-			$response->errorMessage = __("Post ID should not empty");
+			$response->errorMessage = __("Post ID should not empty", "woocommerce-products-slider");
 			die(wp_json_encode($response));
 		}
 
@@ -350,7 +350,7 @@ class WoocommerceProductsSliderRest
 
 		if ($post->post_type != "wcps") {
 			$response->error = true;
-			$response->errorMessage = __("Post type is not post grid");
+			$response->errorMessage = __("Post type is not post grid", "woocommerce-products-slider");
 			die(wp_json_encode($response));
 		}
 
@@ -361,11 +361,11 @@ class WoocommerceProductsSliderRest
 
 			if ($new_post_id) {
 				$response->success = true;
-				$response->successMessage = __("Post deleted");
+				$response->successMessage = __("Post deleted", "woocommerce-products-slider");
 			}
 		} else {
 			$response->error = true;
-			$response->errorMessage = __("Post deletion failed.");
+			$response->errorMessage = __("Post deletion failed.", "woocommerce-products-slider");
 		}
 
 
@@ -486,10 +486,10 @@ class WoocommerceProductsSliderRest
 		$message = "";
 		if (!empty($value)) {
 			$status = update_option($name, $value);
-			$message = __("Options updated", "wcps");
+			$message = __("Options updated", "woocommerce-products-slider");
 		} else {
 			$status = false;
-			$message = __("Value should not empty", "wcps");
+			$message = __("Value should not empty", "woocommerce-products-slider");
 		}
 
 
@@ -783,7 +783,7 @@ class WoocommerceProductsSliderRest
 		$response = new stdClass();
 
 		if (empty($postId)) {
-			$response["id_missing"] = __("Post Id should not empty");
+			$response["id_missing"] = __("Post Id should not empty", "woocommerce-products-slider");
 		}
 
 		$content = json_encode($content);
@@ -816,12 +816,16 @@ class WoocommerceProductsSliderRest
 	{
 
 		$postTitle = isset($post_data['postTitle']) ? sanitize_text_field($post_data['postTitle']) : '';
+		$viewType = isset($post_data['viewType']) ? sanitize_text_field($post_data['viewType']) : '';
 		$content = isset($post_data['content']) ? wp_kses_post($post_data['content']) : '';
 		$response = new stdClass();
 
+
+		error_log(wp_json_encode($content));
+
 		if (empty($postTitle)) {
 			$response->error = true;
-			$response->errorMessage = __("Post title should not empty");
+			$response->errorMessage = __("Post title should not empty", "woocommerce-products-slider");
 			die(wp_json_encode($response));
 		}
 
@@ -838,7 +842,7 @@ class WoocommerceProductsSliderRest
 
 		if ($updatep_post_id) {
 			$response->success = true;
-			$response->successMessage = __("Post created");
+			$response->successMessage = __("Post created", "woocommerce-products-slider");
 		}
 		$response->id = $updatep_post_id;
 
@@ -861,7 +865,7 @@ class WoocommerceProductsSliderRest
 
 		if (empty($postTitle)) {
 			$response->error = true;
-			$response->errorMessage = __("Post title should not empty");
+			$response->errorMessage = __("Post title should not empty", "woocommerce-products-slider");
 			die(wp_json_encode($response));
 		}
 
@@ -878,7 +882,7 @@ class WoocommerceProductsSliderRest
 
 		if ($updatep_post_id) {
 			$response->success = true;
-			$response->successMessage = __("Post created");
+			$response->successMessage = __("Post created", "woocommerce-products-slider");
 		}
 		$response->id = $updatep_post_id;
 
@@ -1255,7 +1259,6 @@ class WoocommerceProductsSliderRest
 			$responses['posts'] = $posts;
 			$responses['pagination'] = $pages;
 
-			wp_reset_query();
 			wp_reset_postdata();
 		else :
 			$responses['noPosts'] = true;
@@ -1285,8 +1288,8 @@ class WoocommerceProductsSliderRest
 
 		$queryArgs = isset($post_data['queryArgs']) ? $post_data['queryArgs'] : [];
 
-		$prevText = !empty($post_data['prevText']) ? $post_data['prevText'] : __("Previous", "wcps");
-		$nextText = !empty($post_data['nextText']) ? $post_data['nextText'] : __("Next", "wcps");
+		$prevText = !empty($post_data['prevText']) ? $post_data['prevText'] : __("Previous", "woocommerce-products-slider");
+		$nextText = !empty($post_data['nextText']) ? $post_data['nextText'] : __("Next", "woocommerce-products-slider");
 		$maxPageNum = !empty($post_data['maxPageNum']) ? $post_data['maxPageNum'] : 0;
 
 
@@ -1554,7 +1557,6 @@ class WoocommerceProductsSliderRest
 
 			$responses['posts'] = $posts;
 
-			wp_reset_query();
 			wp_reset_postdata();
 		else :
 			$responses['noPosts'] = true;

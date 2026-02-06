@@ -227,7 +227,7 @@ function wcps_recently_viewed_products()
 {
 
 
-    $viewed_products = !empty($_COOKIE['woocommerce_recently_viewed']) ? (array) explode('|', $_COOKIE['woocommerce_recently_viewed']) : array();
+    $viewed_products = !empty($_COOKIE['woocommerce_recently_viewed']) ? (array) explode('|', wp_unslash($_COOKIE['woocommerce_recently_viewed'])) : array();
     $viewed_products = array_filter(array_map('absint', $viewed_products));
 
     $viewed_products = wcps_recursive_sanitize_arr($viewed_products);
@@ -268,7 +268,7 @@ function wcps_track_product_view()
         if (empty($_COOKIE['woocommerce_recently_viewed']))
             $viewed_products = array();
         else
-            $viewed_products = (array) explode('|', $_COOKIE['woocommerce_recently_viewed']);
+            $viewed_products = (array) explode('|', wp_unslash($_COOKIE['woocommerce_recently_viewed']));
 
         $viewed_products = wcps_recursive_sanitize_arr($viewed_products);
 
@@ -302,9 +302,9 @@ function wcps_posts_shortcode_display($column, $post_id)
 {
     if ($column == 'shortcode') {
 ?>
-        <input style="background:#bfefff" type="text" onClick="this.select();" value="[wcps <?php echo 'id=&quot;' . $post_id . '&quot;'; ?>]" /><br />
+        <input style="background:#bfefff" type="text" onClick="this.select();" value="[wcps <?php echo 'id=&quot;' . esc_attr($post_id) . '&quot;'; ?>]" /><br />
         <textarea cols="50" rows="1" style="background:#bfefff" onClick="this.select();"><?php echo '<?php echo do_shortcode("[wcps id=';
-                                                                                            echo "'" . $post_id . "']";
+                                                                                            echo "'" . esc_attr($post_id) . "']";
                                                                                             echo '"); ?>'; ?></textarea>
 <?php
 

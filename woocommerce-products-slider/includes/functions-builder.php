@@ -5,23 +5,21 @@ add_action('wp_footer', 'wcps_builder_global_scripts', 999);
 function wcps_builder_global_scripts()
 {
 
-    global $PostGridBuilderCss;
+    global $WCPSBuilderCss;
 
-    $PostGridBuilderCss = str_replace("&quot;", '"', $PostGridBuilderCss);
-    $PostGridBuilderCss = str_replace("&gt;", '>', $PostGridBuilderCss);
-
-
-?>
-    <style>
-        <?php echo wp_strip_all_tags($PostGridBuilderCss); ?>
-    </style>
+    $WCPSBuilderCss = str_replace("&quot;", '"', $WCPSBuilderCss);
+    $WCPSBuilderCss = str_replace("&gt;", '>', $WCPSBuilderCss);
 
 
-    <?php
 
+    wp_register_style('WCPSBuilderCss', false);
+    wp_enqueue_style('WCPSBuilderCss');
+
+
+    wp_add_inline_style('WCPSBuilderCss', $WCPSBuilderCss);
 }
 
-function generateLayoutsHTML($elements, $itemData)
+function generateLayoutsHTML_wcps($elements, $itemData)
 {
     $html = '';
     foreach ($elements as $element) {
@@ -35,13 +33,13 @@ function generateLayoutsHTML($elements, $itemData)
             $html .= '<div id="element-' . $element['id'] . '">';
 
             if (!empty($element['children'])) {
-                $html .= generateLayoutsHTML($element['children'], $itemData);
+                $html .= generateLayoutsHTML_wcps($element['children'], $itemData);
             }
             $html .= '</div>';
         } else {
 
             //if (isset($element['content'])) {
-            $html .= generateLayoutsElementHtml($element, $itemData);
+            $html .= generateLayoutsElementHtml_wcps($element, $itemData);
         }
     }
     return $html;
@@ -49,7 +47,7 @@ function generateLayoutsHTML($elements, $itemData)
 
 
 
-function generateLayoutsElementHtml($element, $item)
+function generateLayoutsElementHtml_wcps($element, $item)
 {
 
     $type = $element['type'];
@@ -99,9 +97,9 @@ function generateLayoutsElementHtml($element, $item)
     ob_start();
 
     if ($type == 'content') {
-    ?>
+?>
         <div id="element-<?php echo esc_attr($element['id']); ?>">
-            <?php echo wp_unslash(wp_specialchars_decode($content, ENT_QUOTES)) ?>
+            <?php echo wp_kses_post(wp_unslash(wp_specialchars_decode($content, ENT_QUOTES))); ?>
         </div>
     <?php
     }
@@ -184,16 +182,11 @@ function wcps_builder_post_query_items($queryArgs, $loopLayouts, $args = [])
 
 
     $query_args = [];
+    $tax_query = [];
     foreach ($queryArgs as $item) {
-
-
 
         $id = isset($item['id']) ? $item['id'] : '';
         $val = isset($item['value']) ? $item['value'] : '';
-
-
-
-
 
         if (isset($item['value'])) {
             if ($id == 'postType') {
@@ -383,6 +376,69 @@ function wcps_builder_post_query_items($queryArgs, $loopLayouts, $args = [])
                 $query_args['update_post_meta_cache '] = $val;
             } elseif ($id == 'updatePostTermCache') {
                 $query_args['update_post_term_cache'] = $val;
+            } elseif ($id == 'wcFeaturedProducts') {
+
+                $tax_query[] = array(
+                    'taxonomy' => 'product_visibility',
+                    'field' => 'name',
+                    'terms' => 'featured',
+                    'operator' => 'IN',
+                );
+            } elseif ($id == 'wcOnSaleProducts') {
+
+                $wc_get_product_ids_on_sale = wc_get_product_ids_on_sale();
+                $query_args['post__in'] = $wc_get_product_ids_on_sale;
+            } elseif ($id == 'wcOutOfStockProducts') {
+
+                $tax_query[] = array(
+                    'taxonomy' => 'product_visibility',
+                    'field' => 'name',
+                    'terms' => 'outofstock',
+                    'operator' => 'NOT IN',
+                );
+            } elseif ($id == 'wcUpsellsProducts') {
+
+                $tax_query[] = array(
+                    'taxonomy' => 'product_visibility',
+                    'field' => 'name',
+                    'terms' => 'outofstock',
+                    'operator' => 'NOT IN',
+                );
+            } elseif ($id == 'wcCatalogVisibility') {
+                $catalog_visibility = $val;
+                if ($catalog_visibility == 'hidden') {
+                    $tax_query[] = array(
+                        'taxonomy' => 'product_visibility',
+                        'field'    => 'name',
+                        'terms'    => 'exclude-from-catalog',
+                        'operator' => 'IN',
+                    );
+                }
+
+                if ($catalog_visibility == 'visible') {
+                    $tax_query[] = array(
+                        'taxonomy' => 'product_visibility',
+                        'field'    => 'name',
+                        'terms'    => 'exclude-from-catalog',
+                        'operator' => 'NOT IN',
+                    );
+                }
+                if ($catalog_visibility == 'catalog') {
+                    $tax_query[] = array(
+                        'taxonomy' => 'product_visibility',
+                        'field'    => 'name',
+                        'terms'    => 'exclude-from-catalog',
+                        'operator' => 'NOT IN',
+                    );
+                }
+                if ($catalog_visibility == 'search') {
+                    $tax_query[] = array(
+                        'taxonomy' => 'product_visibility',
+                        'field'    => 'name',
+                        'terms'    => 'exclude-from-search',
+                        'operator' => 'IN',
+                    );
+                }
             }
         }
     }
@@ -395,8 +451,10 @@ function wcps_builder_post_query_items($queryArgs, $loopLayouts, $args = [])
         $paged = 1;
     }
 
-    // if (!empty($paged))
-    //     $query_args['paged'] = $paged;
+    if (!empty($tax_query)) {
+        $query_args['tax_query'] = $tax_query;
+    }
+
 
 
 
@@ -419,15 +477,14 @@ function wcps_builder_post_query_items($queryArgs, $loopLayouts, $args = [])
 
 
             $postData = get_post($post_id);
-            $postsHtml .= "<div class='item $item_class $term_slugs loop-item-$index'>";
-            $postsHtml .= renderContentRecursive($postData, $loopLayouts);
+            $postsHtml .= "<div class='item loop-item-$index $item_class $term_slugs '>";
+            $postsHtml .= renderContentRecursive_wcps($postData, $loopLayouts);
             $postsHtml .= '</div>';
             $index++;
         endwhile;
         $responses['postsHtml'] = $postsHtml;
         $responses['posts_query'] = $posts_query;
         // $responses['max_num_pages'] = isset($posts_query->max_num_pages) ? $posts_query->max_num_pages : 0;;
-        wp_reset_query();
         wp_reset_postdata();
     endif;
 
@@ -442,7 +499,7 @@ function wcps_builder_post_query_items($queryArgs, $loopLayouts, $args = [])
 
 
 
-function renderContentRecursive($postData, array $elements)
+function renderContentRecursive_wcps($postData, array $elements)
 {
     $html = '';
 
@@ -462,10 +519,10 @@ function renderContentRecursive($postData, array $elements)
 
         // Recurse into children if they exist
         if (isset($element['children']) && is_array($element['children'])) {
-            //$html .= renderContentRecursive($postData, $element['children']);
+            //$html .= renderContentRecursive_wcps($postData, $element['children']);
         }
 
-        $html .= apply_filters("generate_element_html_$type", $html, $postData, $element, $children);
+        $html .= apply_filters("wcps_generate_element_html_$type", $html, $postData, $element, $children);
 
 
 
@@ -488,7 +545,7 @@ function renderContentRecursive($postData, array $elements)
 
 
 // postTitle
-function generate_element_html($html, $postData, $element)
+function wcps_generate_element_html($html, $postData, $element)
 {
 
     $post_id = isset($element['ID']) ? $element['ID'] : '';
@@ -507,8 +564,8 @@ function generate_element_html($html, $postData, $element)
 
 
 // postTitle
-add_filter('generate_element_html_postTitle', "generate_element_html_postTitle", 10, 4);
-function generate_element_html_postTitle($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postTitle', "wcps_generate_element_html_postTitle", 10, 4);
+function wcps_generate_element_html_postTitle($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -549,8 +606,8 @@ function generate_element_html_postTitle($html, $postData, $element, $children)
 }
 
 // container
-add_filter('generate_element_html_container', "generate_element_html_container", 10, 4);
-function generate_element_html_container($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_container', "wcps_generate_element_html_container", 10, 4);
+function wcps_generate_element_html_container($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -575,7 +632,7 @@ function generate_element_html_container($html, $postData, $element, $children)
         <?php if (!empty($animateRules)): ?> data-animateOn="<?php echo esc_attr(json_encode($animateRules)) ?>" <?php endif; ?>>
 
         <?php
-        echo renderContentRecursive($postData, $children);
+        echo renderContentRecursive_wcps($postData, $children); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         ?>
     </div>
 
@@ -588,8 +645,8 @@ function generate_element_html_container($html, $postData, $element, $children)
 
 
 // layer
-add_filter('generate_element_html_layer', "generate_element_html_layer", 10, 4);
-function generate_element_html_layer($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_layer', "wcps_generate_element_html_layer", 10, 4);
+function wcps_generate_element_html_layer($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -615,7 +672,7 @@ function generate_element_html_layer($html, $postData, $element, $children)
     <div class="<?php echo esc_attr($type); ?>" id="element-<?php echo esc_attr($id); ?>"
         <?php if (!empty($animateRules)): ?> data-animateOn="<?php echo esc_attr(json_encode($animateRules)) ?>" <?php endif; ?>>
         <?php
-        echo renderContentRecursive($postData, $children);
+        echo renderContentRecursive_wcps($postData, $children); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         ?>
     </div>
 
@@ -637,8 +694,8 @@ function generate_element_html_layer($html, $postData, $element, $children)
 
 
 // postThumbnail
-add_filter('generate_element_html_postThumbnail', "generate_element_html_postThumbnail", 10, 4);
-function generate_element_html_postThumbnail($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postThumbnail', "wcps_generate_element_html_postThumbnail", 10, 4);
+function wcps_generate_element_html_postThumbnail($html, $postData, $element, $children)
 {
 
     $post_ID = isset($postData->ID) ? $postData->ID : '';
@@ -805,8 +862,8 @@ function generate_element_html_postThumbnail($html, $postData, $element, $childr
 
 
 // postExcerpt
-add_filter('generate_element_html_postExcerpt', "generate_element_html_postExcerpt", 10, 4);
-function generate_element_html_postExcerpt($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postExcerpt', "wcps_generate_element_html_postExcerpt", 10, 4);
+function wcps_generate_element_html_postExcerpt($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -817,7 +874,7 @@ function generate_element_html_postExcerpt($html, $postData, $element, $children
     $target = isset($options['target']) ? $options['target'] : '_blank';
     $limitBy = isset($options['limitBy']) ? $options['limitBy'] : 'word';
     $limitCount = isset($options['limitCount']) ? $options['limitCount'] : 25;
-    $readMoreText = isset($options['readMoreText']) ? $options['readMoreText'] : __('Read More', 'post-grid');
+    $readMoreText = isset($options['readMoreText']) ? $options['readMoreText'] : __('Read More', 'woocommerce-products-slider');
 
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -865,8 +922,8 @@ function generate_element_html_postExcerpt($html, $postData, $element, $children
 }
 
 // readMore
-add_filter('generate_element_html_readMore', "generate_element_html_readMore", 10, 4);
-function generate_element_html_readMore($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_readMore', "wcps_generate_element_html_readMore", 10, 4);
+function wcps_generate_element_html_readMore($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -875,7 +932,7 @@ function generate_element_html_readMore($html, $postData, $element, $children)
 
     $readmoreLinkTo = isset($options['readmoreLinkTo']) ? $options['readmoreLinkTo'] : 'postUrl';
     $target = isset($options['target']) ? $options['target'] : '_blank';
-    $readMoreText = isset($options['readMoreText']) ? $options['readMoreText'] : __('Read More', 'post-grid');
+    $readMoreText = isset($options['readMoreText']) ? $options['readMoreText'] : __('Read More', 'woocommerce-products-slider');
 
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -910,8 +967,8 @@ function generate_element_html_readMore($html, $postData, $element, $children)
 }
 
 // customText
-add_filter('generate_element_html_customText', "generate_element_html_customText", 10, 4);
-function generate_element_html_customText($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_customText', "wcps_generate_element_html_customText", 10, 4);
+function wcps_generate_element_html_customText($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -943,8 +1000,8 @@ function generate_element_html_customText($html, $postData, $element, $children)
 
 
 // postDate
-add_filter('generate_element_html_postDate', "generate_element_html_postDate", 10, 4);
-function generate_element_html_postDate($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postDate', "wcps_generate_element_html_postDate", 10, 4);
+function wcps_generate_element_html_postDate($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -964,7 +1021,7 @@ function generate_element_html_postDate($html, $postData, $element, $children)
     $post_date = isset($the_post->post_date) ? $the_post->post_date : '';
 
 
-    $formatedPostDate = date($format, strtotime($post_date));
+    $formatedPostDate = gmdate($format, strtotime($post_date));
 
 
 
@@ -1009,8 +1066,8 @@ function generate_element_html_postDate($html, $postData, $element, $children)
 }
 
 // postAuthor
-add_filter('generate_element_html_postAuthor', "generate_element_html_postAuthor", 10, 4);
-function generate_element_html_postAuthor($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postAuthor', "wcps_generate_element_html_postAuthor", 10, 4);
+function wcps_generate_element_html_postAuthor($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -1070,8 +1127,8 @@ function generate_element_html_postAuthor($html, $postData, $element, $children)
 }
 
 // postAuthorAvatar
-add_filter('generate_element_html_postAuthorAvatar', "generate_element_html_postAuthorAvatar", 10, 4);
-function generate_element_html_postAuthorAvatar($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postAuthorAvatar', "wcps_generate_element_html_postAuthorAvatar", 10, 4);
+function wcps_generate_element_html_postAuthorAvatar($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -1142,8 +1199,8 @@ function generate_element_html_postAuthorAvatar($html, $postData, $element, $chi
 
 
 // postCategories
-add_filter('generate_element_html_postCategories', "generate_element_html_postCategories", 10, 4);
-function generate_element_html_postCategories($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postCategories', "wcps_generate_element_html_postCategories", 10, 4);
+function wcps_generate_element_html_postCategories($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -1297,8 +1354,8 @@ function generate_element_html_postCategories($html, $postData, $element, $child
 }
 
 // postTags
-add_filter('generate_element_html_postTags', "generate_element_html_postTags", 10, 4);
-function generate_element_html_postTags($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_postTags', "wcps_generate_element_html_postTags", 10, 4);
+function wcps_generate_element_html_postTags($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -1455,8 +1512,8 @@ function generate_element_html_postTags($html, $postData, $element, $children)
 
 
 // wooPrice
-add_filter('generate_element_html_wooPrice', "generate_element_html_wooPrice", 10, 4);
-function generate_element_html_wooPrice($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooPrice', "wcps_generate_element_html_wooPrice", 10, 4);
+function wcps_generate_element_html_wooPrice($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -1564,8 +1621,8 @@ function generate_element_html_wooPrice($html, $postData, $element, $children)
 }
 
 // wooAddToCart
-add_filter('generate_element_html_wooAddToCart', "generate_element_html_wooAddToCart", 10, 4);
-function generate_element_html_wooAddToCart($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooAddToCart', "wcps_generate_element_html_wooAddToCart", 10, 4);
+function wcps_generate_element_html_wooAddToCart($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -1574,7 +1631,7 @@ function generate_element_html_wooAddToCart($html, $postData, $element, $childre
     $type = isset($element['type']) ? $element['type'] : '';
     $id = isset($element['id']) ? $element['id'] : '';
     $options = isset($element['options']) ? $element['options'] : [];
-    $addToCartText = isset($options['addToCartText']) ? $options['addToCartText'] : 'Add To Cart';
+    $addToCartText = isset($options['addToCartText']) ? $options['addToCartText'] : __("View Product", 'woocommerce-products-slider');
     $cartBtnRel = isset($options['rel']) ? $options['rel'] : '';
 
     $quantityEnable = isset($options['quantityEnable']) ? $options['quantityEnable'] : '';
@@ -1591,7 +1648,7 @@ function generate_element_html_wooAddToCart($html, $postData, $element, $childre
     $postfixText = isset($options['postfixText']) ? $options['postfixText'] : '';
     $post_title = isset($postData->post_title) ? $postData->post_title : '';
     $cartBtnAjax = isset($cartBtnOptions['ajax']) ? $cartBtnOptions['ajax'] : true;
-    $cartBtnText = __("View Product", 'combo-blocks');
+    $cartBtnText = __("View Product", 'woocommerce-products-slider');
 
     if ($iconLibrary == 'fontAwesome') {
         wp_enqueue_style('fontawesome-icons');
@@ -1640,11 +1697,11 @@ function generate_element_html_wooAddToCart($html, $postData, $element, $childre
         if ($productType == 'simple') :
         ?>
             <?php if ($quantityEnable) : ?>
-                <div class='quantity-wrap' data-blockid="<?php echo esc_attr($post_id); ?>">
-                    <span class='quantity-decrease'>-</span>
-                    <input class='quantity-input' size="3" type="text" inputmode="numeric"
+                <div class='quantityWrap' data-blockid="<?php echo esc_attr($post_id); ?>">
+                    <span class='quantityDecrease'>-</span>
+                    <input class='quantityInput' placeholder="1" size="4" type="text" inputmode="numeric"
                         value="<?php echo esc_attr($quantityInputQuantity); ?>" />
-                    <span class='quantity-increase'>+</span>
+                    <span class='quantityIncrease'>+</span>
                 </div>
             <?php endif; ?>
             <a class='<?php echo ($cartBtnAjax) ? 'ajax_add_to_cart' : ''; ?> cartBtn'
@@ -1661,7 +1718,7 @@ function generate_element_html_wooAddToCart($html, $postData, $element, $childre
                 <?php if ($iconPosition == 'beforeCartText') : ?>
                     <?php echo wp_kses_post($fontIconHtml); ?>
                 <?php endif; ?>
-                <?php echo wp_kses_post($cartBtnText); ?>
+                <?php echo wp_kses_post($addToCartText); ?>
                 <?php if ($iconPosition == 'afterCartText') : ?>
                     <?php echo wp_kses_post($fontIconHtml); ?>
                 <?php endif; ?>
@@ -1673,7 +1730,7 @@ function generate_element_html_wooAddToCart($html, $postData, $element, $childre
                 <?php if ($iconPosition == 'beforeCartText') : ?>
                     <?php echo wp_kses_post($fontIconHtml); ?>
                 <?php endif; ?>
-                <?php echo wp_kses_post($cartBtnText); ?>
+                <?php echo wp_kses_post($addToCartText); ?>
                 <?php if ($iconPosition == 'afterCartText') : ?>
                     <?php echo wp_kses_post($fontIconHtml); ?>
                 <?php endif; ?>
@@ -1698,8 +1755,8 @@ function generate_element_html_wooAddToCart($html, $postData, $element, $childre
 }
 
 // wooSaleBadge
-add_filter('generate_element_html_wooSaleBadge', "generate_element_html_wooSaleBadge", 10, 4);
-function generate_element_html_wooSaleBadge($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooSaleBadge', "wcps_generate_element_html_wooSaleBadge", 10, 4);
+function wcps_generate_element_html_wooSaleBadge($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -1804,8 +1861,8 @@ function generate_element_html_wooSaleBadge($html, $postData, $element, $childre
 }
 
 // wooTotalSales
-add_filter('generate_element_html_wooTotalSales', "generate_element_html_wooTotalSales", 10, 4);
-function generate_element_html_wooTotalSales($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooTotalSales', "wcps_generate_element_html_wooTotalSales", 10, 4);
+function wcps_generate_element_html_wooTotalSales($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -1888,8 +1945,8 @@ function generate_element_html_wooTotalSales($html, $postData, $element, $childr
 }
 
 // wooSKU
-add_filter('generate_element_html_wooSKU', "generate_element_html_wooSKU", 10, 4);
-function generate_element_html_wooSKU($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooSKU', "wcps_generate_element_html_wooSKU", 10, 4);
+function wcps_generate_element_html_wooSKU($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -1974,8 +2031,8 @@ function generate_element_html_wooSKU($html, $postData, $element, $children)
 }
 
 // wooStockQuantity
-add_filter('generate_element_html_wooStockQuantity', "generate_element_html_wooStockQuantity", 10, 4);
-function generate_element_html_wooStockQuantity($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooStockQuantity', "wcps_generate_element_html_wooStockQuantity", 10, 4);
+function wcps_generate_element_html_wooStockQuantity($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -2061,8 +2118,8 @@ function generate_element_html_wooStockQuantity($html, $postData, $element, $chi
 }
 
 // wooInStock
-add_filter('generate_element_html_wooInStock', "generate_element_html_wooInStock", 10, 4);
-function generate_element_html_wooInStock($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooInStock', "wcps_generate_element_html_wooInStock", 10, 4);
+function wcps_generate_element_html_wooInStock($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -2202,8 +2259,8 @@ function generate_element_html_wooInStock($html, $postData, $element, $children)
 }
 
 // wooProductRatings
-add_filter('generate_element_html_wooProductRatings', "generate_element_html_wooProductRatings", 10, 4);
-function generate_element_html_wooProductRatings($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooProductRatings', "wcps_generate_element_html_wooProductRatings", 10, 4);
+function wcps_generate_element_html_wooProductRatings($html, $postData, $element, $children)
 {
 
     $post_id = isset($postData->ID) ? $postData->ID : '';
@@ -2341,8 +2398,8 @@ function generate_element_html_wooProductRatings($html, $postData, $element, $ch
 
 
 // wooCategories
-add_filter('generate_element_html_wooCategories', "generate_element_html_wooCategories", 10, 4);
-function generate_element_html_wooCategories($html, $postData, $element, $children)
+add_filter('wcps_generate_element_html_wooCategories', "wcps_generate_element_html_wooCategories", 10, 4);
+function wcps_generate_element_html_wooCategories($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';
@@ -2496,8 +2553,8 @@ function generate_element_html_wooCategories($html, $postData, $element, $childr
 }
 
 // wooTags
-//add_filter('generate_element_html_wooTags', "generate_element_html_wooTags", 10, 4);
-function generate_element_html_wooTags($html, $postData, $element, $children)
+//add_filter('wcps_generate_element_html_wooTags', "wcps_generate_element_html_wooTags", 10, 4);
+function wcps_generate_element_html_wooTags($html, $postData, $element, $children)
 {
 
     $type = isset($element['type']) ? $element['type'] : '';

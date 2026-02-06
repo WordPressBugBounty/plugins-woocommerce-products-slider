@@ -6,7 +6,7 @@ add_action('wcps_builder_viewGrid', 'wcps_builder_viewGrid', 5, 2);
 function wcps_builder_viewGrid($post_id, $PostGridData)
 {
 
-    global $PostGridBuilderCss;
+    global $WCPSBuilderCss;
 
     $globalOptions = isset($PostGridData["globalOptions"]) ? $PostGridData["globalOptions"] : [];
     $lazyLoad = isset($globalOptions["lazyLoad"]) ? $globalOptions["lazyLoad"] : false;
@@ -67,7 +67,7 @@ function wcps_builder_viewGrid($post_id, $PostGridData)
     $reponsiveCss = isset($PostGridData["reponsiveCss"]) ? $PostGridData["reponsiveCss"] : "";
 
 
-    $PostGridBuilderCss .= $reponsiveCss;
+    $WCPSBuilderCss .= $reponsiveCss;
 
     // var_dump($reponsiveCss);
 
@@ -127,7 +127,7 @@ function wcps_builder_viewGrid($post_id, $PostGridData)
         <div class="items">
             <?php
 
-            echo $postsHtml;
+            echo wp_kses_post($postsHtml);
 
             ?>
         </div>
@@ -209,7 +209,7 @@ function wcps_builder_viewGrid($post_id, $PostGridData)
         <?php if ($paginationType == 'infinite') : ?>
             <div id="pagination-<?php echo esc_attr($blockId); ?>" class="pagination <?php echo esc_attr($blockId); ?> ComboBlocksPostGrid-pagination <?php echo esc_attr($paginationType); ?>" data-postqueryargs="<?php echo esc_attr(json_encode($blockArgs)); ?>">
                 <div class="infinite-loader box">
-                    <?php echo __('Loading...', 'combo-blocks'); ?>
+                    <?php echo esc_html__('Loading...', 'woocommerce-products-slider'); ?>
                 </div>
             </div>
         <?php endif; ?>

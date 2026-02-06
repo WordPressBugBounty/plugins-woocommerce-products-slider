@@ -3,9 +3,9 @@ if (!defined('ABSPATH')) exit;  // if direct access
 
 if (!current_user_can('manage_options')) return;
 
-$keyword = isset($_GET['keyword']) ? sanitize_text_field($_GET['keyword']) : '';
-$paged = isset($_GET['paged']) ? sanitize_text_field($_GET['paged']) : '';
-$tabs = isset($_GET['tabs']) ? sanitize_text_field($_GET['tabs']) : 'latest';
+$keyword = isset($_GET['keyword']) ? sanitize_text_field(wp_unslash($_GET['keyword'])) : '';
+$paged = isset($_GET['paged']) ? sanitize_text_field(wp_unslash($_GET['paged'])) : '';
+$tabs = isset($_GET['tabs']) ? sanitize_text_field(wp_unslash($_GET['tabs'])) : 'latest';
 
 $wcps_settings = get_option('wcps_settings');
 $license_key = isset($wcps_settings['license_key']) ? $wcps_settings['license_key'] : '';
@@ -27,19 +27,19 @@ wp_localize_script(
 
 ?>
 <div class="wrap">
-    <h2><?php _e('PickPlugins Product Slider - Import Layouts', 'woocommerce-products-slider'); ?></h2>
+    <h2><?php esc_html_e('PickPlugins Product Slider - Import Layouts', 'woocommerce-products-slider'); ?></h2>
 
     <div class="wpblockhub-search">
 
         <div class="wp-filter">
             <ul class="filter-links">
-                <li class=""><a href="<?php echo esc_url_raw($_SERVER['REQUEST_URI']); ?>&tabs=latest" class="<?php if ($tabs == 'latest') echo 'current'; ?>" aria-current="page"><?php _e('Latest', 'woocommerce-products-slider'); ?></a> </li>
-                <li class=""><a href="<?php echo esc_url_raw($_SERVER['REQUEST_URI']); ?>&tabs=free" class="<?php if ($tabs == 'free') echo 'current'; ?>" aria-current="page"><?php _e('Free', 'woocommerce-products-slider'); ?></a> </li>
-                <li class=""><a href="<?php echo esc_url_raw($_SERVER['REQUEST_URI']); ?>&tabs=pro" class="<?php if ($tabs == 'pro') echo 'current'; ?>" aria-current="page"><?php _e('Premium', 'woocommerce-products-slider'); ?></a> </li>
+                <li class=""><a href="<?php echo esc_url(wp_unslash($_SERVER['REQUEST_URI'])); ?>&tabs=latest" class="<?php if ($tabs == 'latest') echo 'current'; ?>" aria-current="page"><?php esc_html_e('Latest', 'woocommerce-products-slider'); ?></a> </li>
+                <li class=""><a href="<?php echo esc_url(wp_unslash($_SERVER['REQUEST_URI'])); ?>&tabs=free" class="<?php if ($tabs == 'free') echo 'current'; ?>" aria-current="page"><?php esc_html_e('Free', 'woocommerce-products-slider'); ?></a> </li>
+                <li class=""><a href="<?php echo esc_url(wp_unslash($_SERVER['REQUEST_URI'])); ?>&tabs=pro" class="<?php if ($tabs == 'pro') echo 'current'; ?>" aria-current="page"><?php esc_html_e('Premium', 'woocommerce-products-slider'); ?></a> </li>
             </ul>
             <form class="block-search-form">
                 <span class="loading"></span>
-                <input id="block-keyword" type="search" placeholder="<?php _e('Start typing...', 'wp-block-hub'); ?>" value="<?php echo esc_html($keyword); ?>">
+                <input id="block-keyword" type="search" placeholder="<?php esc_html_e('Start typing...', 'woocommerce-products-slider'); ?>" value="<?php echo esc_html($keyword); ?>">
             </form>
         </div>
 
@@ -67,8 +67,8 @@ wp_localize_script(
         ?>
             <div class="return-empty">
                 <ul>
-                    <li><?php echo __("Unexpected Error! The query returned with an error.", 'woocommerce-products-slider'); ?></li>
-                    <li><?php echo __("Make sure your internet connection is up.", 'woocommerce-products-slider'); ?></li>
+                    <li><?php echo esc_html__("Unexpected Error! The query returned with an error.", 'woocommerce-products-slider'); ?></li>
+                    <li><?php echo esc_html__("Make sure your internet connection is up.", 'woocommerce-products-slider'); ?></li>
                 </ul>
             </div>
         <?php
@@ -118,13 +118,13 @@ wp_localize_script(
 
                             <?php if (!empty($layout_preview_img)) : ?>
                                 <div class="block-thumb">
-                                    <img src="<?php echo $layout_preview_img; ?>">
+                                    <img src="<?php echo esc_url($layout_preview_img); ?>">
                                 </div>
                             <?php endif; ?>
 
 
                             <div class="block-content">
-                                <div class="block-name"><?php echo $block_title; ?></div>
+                                <div class="block-name"><?php echo esc_html($block_title); ?></div>
 
                             </div>
                             <div class="actions">
@@ -133,7 +133,7 @@ wp_localize_script(
                                 if ($is_pro == 'yes' && empty($license_key)) {
                                 } else {
                                 ?>
-                                    <span class="button  import-layout" post_id="<?php echo $post_id; ?>"><i class="fas fa-download"></i> Import (<?php echo $download_count; ?>)</span>
+                                    <span class="button  import-layout" post_id="<?php echo esc_attr($post_id); ?>"><i class="fas fa-download"></i> Import (<?php echo esc_html($download_count); ?>)</span>
                                 <?php
                                 }
 
@@ -176,7 +176,7 @@ wp_localize_script(
 
             //var_dump(get_pagenum_link( $big ));
 
-            echo paginate_links(
+            echo wp_kses_post(paginate_links(
                 array(
                     'base' => preg_replace('/\?.*/', '', get_pagenum_link()) . '%_%',
                     //'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
@@ -189,7 +189,7 @@ wp_localize_script(
 
 
                 )
-            );
+            ));
             ?>
         </div>
 

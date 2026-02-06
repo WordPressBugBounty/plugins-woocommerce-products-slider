@@ -6,7 +6,7 @@ add_action('wcps_builder_viewMasonry', 'wcps_builder_viewMasonry', 5, 2);
 function wcps_builder_viewMasonry($post_id, $PostGridData)
 {
 
-    global $PostGridBuilderCss;
+    global $WCPSBuilderCss;
 
 
     $globalOptions = isset($PostGridData["globalOptions"]) ? $PostGridData["globalOptions"] : [];
@@ -67,7 +67,7 @@ function wcps_builder_viewMasonry($post_id, $PostGridData)
 
     //var_dump($reponsiveCss);
 
-    $PostGridBuilderCss .= $reponsiveCss;
+    $WCPSBuilderCss .= $reponsiveCss;
 
 
 
@@ -140,7 +140,7 @@ function wcps_builder_viewMasonry($post_id, $PostGridData)
 
         <div class="items" data-masonry="<?php echo esc_attr(json_encode($masonryOptions)) ?>" data-block-id="<?php echo esc_attr(json_encode($dataBlockId)) ?>">
             <?php
-            echo $postsHtml;
+            echo wp_kses_post($postsHtml);
             ?>
         </div>
 
@@ -221,7 +221,7 @@ function wcps_builder_viewMasonry($post_id, $PostGridData)
         <?php if ($paginationType == 'infinite') : ?>
             <div id="pagination-<?php echo esc_attr($blockId); ?>" class="pagination <?php echo esc_attr($blockId); ?> ComboBlocksPostGrid-pagination <?php echo esc_attr($paginationType); ?>" data-postqueryargs="<?php echo esc_attr(json_encode($blockArgs)); ?>">
                 <div class="infinite-loader box">
-                    <?php echo __('Loading...', 'combo-blocks'); ?>
+                    <?php echo esc_html__('Loading...', 'woocommerce-products-slider'); ?>
                 </div>
             </div>
         <?php endif; ?>

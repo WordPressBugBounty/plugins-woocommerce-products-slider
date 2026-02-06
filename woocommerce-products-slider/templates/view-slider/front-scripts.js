@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
         dataSplideWraps.forEach(item => {
             var dataSplideargs = item.getAttribute("data-splide");
             var dataSplideargsObj = JSON.parse(dataSplideargs);
+
+            console.log(dataSplideargsObj);
+
             var splide = new Splide('#' + item.id);
             splide.mount();
         })

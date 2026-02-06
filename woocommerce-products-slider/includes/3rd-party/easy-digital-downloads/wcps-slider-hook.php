@@ -18,7 +18,7 @@ function wcps_slider_main_items_edd_downloads($args){
 
     if(empty($item_layout_id)){
 
-        ?><i class="far fa-times-circle"></i> Please create a <a target="_blank" href="<?php echo admin_url(); ?>post-new.php?post_type=wcps_layout">layout</a> first. watch this video to learn <a href="https://www.youtube.com/watch?v=_HMHaSjjHdo&list=PL0QP7T2SN94bgierw1J8Qn3sf4mZo7F9f&index=8&t=0s">customize layouts</a>
+        ?><i class="far fa-times-circle"></i> Please create a <a target="_blank" href="<?php echo esc_url(admin_url()); ?>post-new.php?post_type=wcps_layout">layout</a> first. watch this video to learn <a href="https://www.youtube.com/watch?v=_HMHaSjjHdo&list=PL0QP7T2SN94bgierw1J8Qn3sf4mZo7F9f&index=8&t=0s">customize layouts</a>
         <?php
 
         return;
@@ -64,7 +64,7 @@ function wcps_slider_main_items_edd_downloads($args){
 
     if(in_array('query_args', $developer_options)){
         echo 'query_args: ############';
-        echo '<pre>'.var_export($query_args, true).'</pre>';
+        echo '<pre>'.esc_html(var_export($query_args, true)).'</pre>';
     }
 
 
@@ -75,7 +75,7 @@ function wcps_slider_main_items_edd_downloads($args){
     if(in_array('found_posts', $developer_options)){
 
         echo 'found_posts: ############';
-        echo '<pre>'.var_export(((int) $wcps_query->found_posts), true).'</pre>';
+        echo '<pre>'.esc_html(var_export(((int) $wcps_query->found_posts), true)).'</pre>';
     }
 
 
@@ -87,7 +87,7 @@ function wcps_slider_main_items_edd_downloads($args){
         do_action('wcps_slider_before_items', $wcps_query, $args);
 
         ?>
-        <div id="wcps-<?php echo $wcps_id; ?>" class="<?php echo $wcps_items_class; ?>">
+        <div id="wcps-<?php echo esc_attr($wcps_id); ?>" class="<?php echo esc_attr($wcps_items_class); ?>">
             <?php
 
             $loop_count = 1;
@@ -105,7 +105,7 @@ function wcps_slider_main_items_edd_downloads($args){
                 $loop_count++;
             endwhile;
 
-            wp_reset_query();
+            wp_reset_postdata();
             ?>
         </div>
 
@@ -141,8 +141,8 @@ function wcps_slider_item_edd_download($args){
     $wcps_item_class = apply_filters('wcps_slider_item_class', 'item ', $args);
 
     ?>
-    <div class="<?php echo $wcps_item_class; ?>">
-        <div class="elements-wrapper layout-<?php echo $item_layout_id; ?>">
+    <div class="<?php echo esc_attr($wcps_item_class); ?>">
+        <div class="elements-wrapper layout-<?php echo esc_attr($item_layout_id); ?>">
             <?php
             if(!empty($layout_elements_data))
                 foreach ($layout_elements_data as $elementGroupIndex => $elementGroupData){

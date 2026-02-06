@@ -3,7 +3,7 @@
 Plugin Name: Product Slider for WooCommerce by PickPlugins
 Plugin URI: http://pickplugins.com/items/woocommerce-product-slider-for-wordpress/
 Description: Fully responsive and mobile ready Carousel Slider for your WooCommerce product. unlimited slider anywhere via short-codes and easy admin setting.
-Version: 1.13.56
+Version: 1.13.60
 Author: PickPlugins
 Text Domain: woocommerce-products-slider
 Author URI: http://pickplugins.com
@@ -23,9 +23,9 @@ class WoocommerceProductsSlider
         define('wcps_plugin_url', plugins_url('/', __FILE__));
         define('wcps_plugin_dir', plugin_dir_path(__FILE__));
         define('wcps_plugin_name', 'PickPlugins Product Slider');
-        define('wcps_plugin_version', '1.13.56');
-        define('wcps_server_url', 'https://www.pickplugins.com/demo/woocommerce-products-slider/');
-        //define('wcps_server_url', 'http://localhost/wp/');
+        define('wcps_plugin_version', '1.13.58');
+        define('wcps_server_url', 'https://demo.pickplugins.com/woocommerce-products-slider/');
+        // define('wcps_server_url', 'http://localhost/wp/');
 
 
 
@@ -160,6 +160,7 @@ class WoocommerceProductsSlider
         // wp_register_script('tiny-slider', 'https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js' , array( 'jquery' ));
         // wp_register_style('tiny-slider', wcps_plugin_url.'assets/front/css/tiny-slider.css');
 
+        wp_register_script('wcps-slider-front', wcps_plugin_url . 'templates/view-slider/front-scripts.js', []);
 
 
 

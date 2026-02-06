@@ -28,6 +28,7 @@ function wcps_metabox_navs_dokan($tabs)
 
     $tabs[] = array(
         'id' => 'query_dokan_vendors',
+        /* translators: %s is Icon HTML */
         'title' => sprintf(__('%s Query dokan vendors', 'woocommerce-products-slider'), '<i class="fas fa-qrcode"></i>'),
         'priority' => 3,
         'active' => ($current_tab == 'query_dokan_vendors') ? true : false,

@@ -114,6 +114,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'shortcode',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Shortcode', 'woocommerce-products-slider'), '<i class="fas fa-laptop-code"></i>'),
             'priority' => 1,
             'active' => ($current_tab == 'shortcode') ? true : false,
@@ -121,6 +122,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'slider_options',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Slider options', 'woocommerce-products-slider'), '<i class="fa fa-cogs"></i>'),
             'priority' => 2,
             'active' => ($current_tab == 'slider_options') ? true : false,
@@ -128,6 +130,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'query_product',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Query product', 'woocommerce-products-slider'), '<i class="fas fa-qrcode"></i>'),
             'priority' => 3,
             'active' => ($current_tab == 'query_product') ? true : false,
@@ -137,6 +140,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'query_orders',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Query orders', 'woocommerce-products-slider'), '<i class="fas fa-qrcode"></i>'),
             'priority' => 3,
             'active' => ($current_tab == 'query_orders') ? true : false,
@@ -146,6 +150,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'query_categories',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Query categories', 'woocommerce-products-slider'), '<i class="fas fa-qrcode"></i>'),
             'priority' => 3,
             'active' => ($current_tab == 'query_categories') ? true : false,
@@ -155,6 +160,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'style',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Style', 'woocommerce-products-slider'), '<i class="fas fa-palette"></i>'),
             'priority' => 4,
             'active' => ($current_tab == 'style') ? true : false,
@@ -162,6 +168,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'layouts',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Layouts', 'woocommerce-products-slider'), '<i class="fas fa-qrcode"></i>'),
             'priority' => 5,
             'active' => ($current_tab == 'layouts') ? true : false,
@@ -170,6 +177,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'custom_scripts',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Custom scripts', 'woocommerce-products-slider'), '<i class="far fa-file-code"></i>'),
             'priority' => 6,
             'active' => ($current_tab == 'custom_scripts') ? true : false,
@@ -177,6 +185,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'help_support',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Help support', 'woocommerce-products-slider'), '<i class="fas fa-hands-helping"></i>'),
             'priority' => 80,
             'active' => ($current_tab == 'help_support') ? true : false,
@@ -184,6 +193,7 @@ class class_wcps_metabox
 
         $wcps_settings_tabs[] = array(
             'id' => 'buy_pro',
+            /* translators: %s is Icon HTML */
             'title' => sprintf(__('%s Buy pro', 'woocommerce-products-slider'), '<i class="fas fa-store"></i>'),
             'priority' => 90,
             'active' => ($current_tab == 'buy_pro') ? true : false,
@@ -245,7 +255,7 @@ class class_wcps_metabox
         </script>
 
         <div class="settings-tabs vertical">
-            <input class="current_tab" type="hidden" name="wcps_options[current_tab]" value="<?php echo $current_tab; ?>">
+            <input class="current_tab" type="hidden" name="wcps_options[current_tab]" value="<?php echo esc_attr($current_tab); ?>">
             <div class="view-types">
 
                 <?php
@@ -276,7 +286,7 @@ class class_wcps_metabox
                     $data_visible = isset($tab['data_visible']) ? $tab['data_visible'] : '';
                     $hidden = isset($tab['hidden']) ? $tab['hidden'] : false;
                 ?>
-                    <li <?php if (!empty($data_visible)):  ?> data_visible="<?php echo $data_visible; ?>" <?php endif; ?> class="tab-nav <?php if ($hidden) echo 'hidden'; ?> <?php if ($active) echo 'active'; ?>" data-id="<?php echo $id; ?>"><?php echo $title; ?></li>
+                    <li <?php if (!empty($data_visible)):  ?> data_visible="<?php echo esc_attr($data_visible); ?>" <?php endif; ?> class="tab-nav <?php if ($hidden) echo 'hidden'; ?> <?php if ($active) echo 'active'; ?>" data-id="<?php echo esc_attr($id); ?>"><?php echo wp_kses_post($title); ?></li>
                 <?php
                 }
                 ?>
@@ -288,7 +298,7 @@ class class_wcps_metabox
                 $active = $tab['active'];
             ?>
 
-                <div class="tab-content <?php if ($active) echo 'active'; ?>" id="<?php echo $id; ?>">
+                <div class="tab-content <?php if ($active) echo 'active'; ?>" id="<?php echo esc_attr($id); ?>">
                     <?php
                     do_action('wcps_metabox_content_' . $id, $post_id);
                     ?>
@@ -320,7 +330,7 @@ class class_wcps_metabox
         if (!isset($_POST['wcps_nonce_check_value']))
             return $post_id;
 
-        $nonce = sanitize_text_field($_POST['wcps_nonce_check_value']);
+        $nonce = sanitize_text_field(wp_unslash($_POST['wcps_nonce_check_value']));
 
         // Verify that the nonce is valid.
         if (!wp_verify_nonce($nonce, 'wcps_nonce_check'))

@@ -1,22 +1,23 @@
 <?php
-if ( ! defined('ABSPATH')) exit;  // if direct access
+if (! defined('ABSPATH')) exit;  // if direct access
 
 add_filter('wcps_layout_elements', 'wcps_layout_elements_yith_wishlist');
 
-function wcps_layout_elements_yith_wishlist($layout_elements){
+function wcps_layout_elements_yith_wishlist($layout_elements)
+{
 
 
-    $layout_elements['yith_wishlist'] = array('name' =>__('YITH wishlist','woocommerce-products-slider'));
+    $layout_elements['yith_wishlist'] = array('name' => __('YITH wishlist', 'woocommerce-products-slider'));
 
     return $layout_elements;
-
 }
 
 
 
 
-add_action('wcps_layout_elements_option_yith_wishlist','wcps_layout_elements_option_yith_wishlist');
-function wcps_layout_elements_option_yith_wishlist($parameters){
+add_action('wcps_layout_elements_option_yith_wishlist', 'wcps_layout_elements_option_yith_wishlist');
+function wcps_layout_elements_option_yith_wishlist($parameters)
+{
 
     $settings_tabs_field = new settings_tabs_field();
 
@@ -34,28 +35,28 @@ function wcps_layout_elements_option_yith_wishlist($parameters){
     $background_color = isset($element_data['background_color']) ? $element_data['background_color'] : '';
     $padding = isset($element_data['padding']) ? $element_data['padding'] : '';
 
-    ?>
+?>
     <div class="item">
         <div class="element-title header ">
             <span class="remove" onclick="jQuery(this).parent().parent().remove()"><i class="fas fa-times"></i></span>
             <span class="sort"><i class="fas fa-sort"></i></span>
 
-            <span class="expand"><?php echo __('YITH wishlist','woocommerce-products-slider'); ?></span>
+            <span class="expand"><?php echo esc_html__('YITH wishlist', 'woocommerce-products-slider'); ?></span>
         </div>
         <div class="element-options options">
 
             <?php
 
             $args = array(
-                'id'		=> 'font_size',
-                'css_id'		=> $element_index.'_font_size',
-                'parent' => $input_name.'[yith_wishlist]',
-                'title'		=> __('Font size','woocommerce-products-slider'),
-                'details'	=> __('Choose font size.','woocommerce-products-slider'),
-                'type'		=> 'text',
-                'value'		=> $font_size,
-                'default'		=> '',
-                'placeholder'		=> '16px',
+                'id'        => 'font_size',
+                'css_id'        => $element_index . '_font_size',
+                'parent' => $input_name . '[yith_wishlist]',
+                'title'        => __('Font size', 'woocommerce-products-slider'),
+                'details'    => __('Choose font size.', 'woocommerce-products-slider'),
+                'type'        => 'text',
+                'value'        => $font_size,
+                'default'        => '',
+                'placeholder'        => '16px',
 
             );
 
@@ -63,72 +64,72 @@ function wcps_layout_elements_option_yith_wishlist($parameters){
 
 
             $args = array(
-                'id'		=> 'font_family',
-                'css_id'		=> $element_index.'_font_family',
-                'parent' => $input_name.'[yith_wishlist]',
-                'title'		=> __('Font family','woocommerce-products-slider'),
-                'details'	=> __('Set font family.','woocommerce-products-slider'),
-                'type'		=> 'text',
-                'value'		=> $font_family,
-                'default'		=> '',
-                'placeholder'		=> 'Open Sans',
+                'id'        => 'font_family',
+                'css_id'        => $element_index . '_font_family',
+                'parent' => $input_name . '[yith_wishlist]',
+                'title'        => __('Font family', 'woocommerce-products-slider'),
+                'details'    => __('Set font family.', 'woocommerce-products-slider'),
+                'type'        => 'text',
+                'value'        => $font_family,
+                'default'        => '',
+                'placeholder'        => 'Open Sans',
             );
 
             $settings_tabs_field->generate_field($args);
 
 
             $args = array(
-                'id'		=> 'color',
-                'css_id'		=> $element_index.'_content_color',
-                'parent' => $input_name.'[yith_wishlist]',
-                'title'		=> __('Color','woocommerce-products-slider'),
-                'details'	=> __('Title text color.','woocommerce-products-slider'),
-                'type'		=> 'colorpicker',
-                'value'		=> $color,
-                'default'		=> '',
+                'id'        => 'color',
+                'css_id'        => $element_index . '_content_color',
+                'parent' => $input_name . '[yith_wishlist]',
+                'title'        => __('Color', 'woocommerce-products-slider'),
+                'details'    => __('Title text color.', 'woocommerce-products-slider'),
+                'type'        => 'colorpicker',
+                'value'        => $color,
+                'default'        => '',
             );
 
             $settings_tabs_field->generate_field($args);
 
             $args = array(
-                'id'		=> 'background_color',
-                'css_id'		=> $element_index.'_background_color',
-                'parent' => $input_name.'[yith_wishlist]',
-                'title'		=> __('Background color','woocommerce-products-slider'),
-                'details'	=> __('Choose background color.','woocommerce-products-slider'),
-                'type'		=> 'colorpicker',
-                'value'		=> $background_color,
-                'default'		=> '',
-            );
-
-            $settings_tabs_field->generate_field($args);
-
-
-            $args = array(
-                'id'		=> 'margin',
-                'css_id'		=> $element_index.'_margin',
-                'parent' => $input_name.'[yith_wishlist]',
-                'title'		=> __('Margin','woocommerce-products-slider'),
-                'details'	=> __('Set margin.','woocommerce-products-slider'),
-                'type'		=> 'text',
-                'value'		=> $margin,
-                'default'		=> '',
-                'placeholder'		=> '5px 0',
+                'id'        => 'background_color',
+                'css_id'        => $element_index . '_background_color',
+                'parent' => $input_name . '[yith_wishlist]',
+                'title'        => __('Background color', 'woocommerce-products-slider'),
+                'details'    => __('Choose background color.', 'woocommerce-products-slider'),
+                'type'        => 'colorpicker',
+                'value'        => $background_color,
+                'default'        => '',
             );
 
             $settings_tabs_field->generate_field($args);
 
 
             $args = array(
-                'id'		=> 'padding',
-                'css_id'		=> $element_index.'_padding',
-                'parent' => $input_name.'[yith_wishlist]',
-                'title'		=> __('Padding','woocommerce-products-slider'),
-                'details'	=> __('Set padding.','woocommerce-products-slider'),
-                'type'		=> 'text',
-                'value'		=> $padding,
-                'default'		=> '',
-                'placeholder'		=> '5px 0',
+                'id'        => 'margin',
+                'css_id'        => $element_index . '_margin',
+                'parent' => $input_name . '[yith_wishlist]',
+                'title'        => __('Margin', 'woocommerce-products-slider'),
+                'details'    => __('Set margin.', 'woocommerce-products-slider'),
+                'type'        => 'text',
+                'value'        => $margin,
+                'default'        => '',
+                'placeholder'        => '5px 0',
+            );
+
+            $settings_tabs_field->generate_field($args);
+
+
+            $args = array(
+                'id'        => 'padding',
+                'css_id'        => $element_index . '_padding',
+                'parent' => $input_name . '[yith_wishlist]',
+                'title'        => __('Padding', 'woocommerce-products-slider'),
+                'details'    => __('Set padding.', 'woocommerce-products-slider'),
+                'type'        => 'text',
+                'value'        => $padding,
+                'default'        => '',
+                'placeholder'        => '5px 0',
             );
 
             $settings_tabs_field->generate_field($args);
@@ -138,7 +139,7 @@ function wcps_layout_elements_option_yith_wishlist($parameters){
 
         </div>
     </div>
-    <?php
+<?php
 
 }
 
@@ -146,18 +147,19 @@ function wcps_layout_elements_option_yith_wishlist($parameters){
 
 
 add_action('wcps_layout_element_yith_wishlist', 'wcps_layout_element_yith_wishlist', 10);
-function wcps_layout_element_yith_wishlist($args){
+function wcps_layout_element_yith_wishlist($args)
+{
 
     //echo '<pre>'.var_export($args, true).'</pre>';
     $product_id = isset($args['product_id']) ? $args['product_id'] : '';
     $elementData = isset($args['elementData']) ? $args['elementData'] : array();
     $element_index = isset($args['element_index']) ? $args['element_index'] : '';
 
-    $element_class = !empty($element_index) ? 'element-yith_wishlist element-'.$element_index : 'element-yith_wishlist';
+    $element_class = !empty($element_index) ? 'element-yith_wishlist element-' . $element_index : 'element-yith_wishlist';
 
-    ?>
-    <div class="<?php echo $element_class; ?>"><?php echo do_shortcode('[yith_wcwl_add_to_wishlist product_id="'.$product_id.'" ]');; ?></div>
-    <?php
+?>
+    <div class="<?php echo esc_attr($element_class); ?>"><?php echo wp_kses_post(do_shortcode('[yith_wcwl_add_to_wishlist product_id="' . $product_id . '" ]'));; ?></div>
+<?php
 
 }
 
@@ -165,7 +167,8 @@ function wcps_layout_element_yith_wishlist($args){
 
 
 add_action('wcps_layout_element_css_yith_wishlist', 'wcps_layout_element_css_yith_wishlist', 10);
-function wcps_layout_element_css_yith_wishlist($args){
+function wcps_layout_element_css_yith_wishlist($args)
+{
 
 
     $element_index = isset($args['element_index']) ? $args['element_index'] : '';
@@ -184,37 +187,23 @@ function wcps_layout_element_css_yith_wishlist($args){
 
     //echo '<pre>'.var_export($layout_id, true).'</pre>';
 
-    ?>
-    <style >
-
-        .layout-<?php echo $layout_id; ?> .element-<?php echo $element_index; ?>{
-        <?php if(!empty($margin)): ?>
-            margin: <?php echo $margin; ?>;
-        <?php endif; ?>
-
+?>
+    <style>
+        <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?> {
+            <?php if (!empty($margin)): ?>margin: <?php echo esc_attr($margin); ?>;
+            <?php endif; ?>
         }
-        .layout-<?php echo $layout_id; ?> .element-<?php echo $element_index; ?> a{
-        <?php if(!empty($color)): ?>
-            color: <?php echo $color; ?>;
-        <?php endif; ?>
-            text-decoration: none;
-        <?php if(!empty($font_size)): ?>
-            font-size: <?php echo $font_size; ?>;
-        <?php endif; ?>
-        <?php if(!empty($font_family)): ?>
-            font-family: <?php echo $font_family; ?>;
-        <?php endif; ?>
-        <?php if(!empty($padding)): ?>
-            padding: <?php echo $padding; ?>;
-        <?php endif; ?>
-        <?php if(!empty($background_color)): ?>
-            background-color: <?php echo $background_color; ?>;
-        <?php endif; ?>
-        <?php if(!empty($text_align)): ?>
-            text-align: <?php echo $text_align; ?>;
-        <?php endif; ?>
+
+        <?php echo esc_attr('.layout-' . $layout_id); ?><?php echo esc_attr(' .element-' . $element_index); ?>a {
+            <?php if (!empty($color)): ?>color: <?php echo esc_attr($color); ?>;
+            <?php endif; ?>text-decoration: none;
+            <?php if (!empty($font_size)): ?>font-size: <?php echo esc_attr($font_size); ?>;
+            <?php endif; ?><?php if (!empty($font_family)): ?>font-family: <?php echo esc_attr($font_family); ?>;
+            <?php endif; ?><?php if (!empty($padding)): ?>padding: <?php echo esc_attr($padding); ?>;
+            <?php endif; ?><?php if (!empty($background_color)): ?>background-color: <?php echo esc_attr($background_color); ?>;
+            <?php endif; ?><?php if (!empty($text_align)): ?>text-align: <?php echo esc_attr($text_align); ?>;
+            <?php endif; ?>
         }
     </style>
-    <?php
+<?php
 }
-

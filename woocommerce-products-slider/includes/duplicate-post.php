@@ -16,13 +16,13 @@ function wcps_duplicate_post_as_draft()
 	/*
 	 * Nonce verification
 	 */
-	if (!isset($_GET['duplicate_nonce']) || !wp_verify_nonce($_GET['duplicate_nonce'], basename(__FILE__)))
+	if (!isset($_GET['duplicate_nonce']) || !wp_verify_nonce(wp_unslash($_GET['duplicate_nonce']), basename(__FILE__)))
 		return;
 
 	/*
 	 * get the original post id
 	 */
-	$post_id = (isset($_GET['post']) ? absint($_GET['post']) : absint($_POST['post']));
+	$post_id = (isset($_GET['post']) ? absint($_GET['post']) : absint(wp_unslash($_POST['post'])));
 	/*
 	 * and all the original post data then
 	 */
@@ -111,10 +111,10 @@ function wcps_duplicate_post_as_draft()
 		/*
 		 * finally, redirect to the edit post screen for the new draft
 		 */
-		wp_redirect(admin_url('post.php?action=edit&post=' . $new_post_id));
+		wp_safe_redirect(admin_url('post.php?action=edit&post=' . $new_post_id));
 		exit;
 	} else {
-		wp_die('Post creation failed, could not find original post: ' . $post_id);
+		wp_die(esc_html__('Post creation failed, could not find original post: ', 'woocommerce-products-slider') . absint($post_id));
 	}
 }
 add_action('admin_action_wcps_duplicate_post_as_draft', 'wcps_duplicate_post_as_draft');

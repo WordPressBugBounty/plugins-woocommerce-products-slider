@@ -19,7 +19,7 @@ function wcps_ajax_fetch_block_hub_by_id(){
 
     $responses = array();
 
-    $post_id = isset($_POST['post_id']) ? sanitize_text_field($_POST['post_id']) : 0;
+    $post_id = isset($_POST['post_id']) ? sanitize_text_field(wp_unslash($_POST['post_id'])) : 0;
 
     $wcps_settings = get_option('wcps_settings');
     $license_key = isset($wcps_settings['license_key']) ? $wcps_settings['license_key'] : '';

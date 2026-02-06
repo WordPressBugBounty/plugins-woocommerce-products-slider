@@ -43,7 +43,7 @@ function wcps_slider_main_ribbon($args)
         <style>
             <?php echo '.wcps-container-' . esc_attr($wcps_id) . ' .wcps-ribbon'; ?> {
                 background-color: <?php echo esc_attr($ribbon_background_color); ?>;
-                background-image: url("<?php echo esc_url_raw($ribbon_background_img); ?>");
+                background-image: url("<?php echo esc_url($ribbon_background_img); ?>");
                 color: <?php echo esc_attr($ribbon_text_color); ?>;
                 width: <?php echo esc_attr($ribbon_width); ?>;
                 height: <?php echo esc_attr($ribbon_height); ?>;
@@ -348,7 +348,7 @@ function wcps_slider_main_items($args)
 
     if (in_array('query_args', $developer_options)) {
         echo 'query_args: ############';
-        echo '<pre>' . var_export($query_args, true) . '</pre>';
+        echo '<pre>' . esc_html(var_export($query_args, true)) . '</pre>';
     }
 
 
@@ -358,7 +358,7 @@ function wcps_slider_main_items($args)
     if (in_array('found_posts', $developer_options)) {
 
         echo 'found_posts: ############';
-        echo '<pre>' . var_export(((int) $wcps_query->found_posts), true) . '</pre>';
+        echo '<pre>' . esc_html(var_export(((int) $wcps_query->found_posts), true)) . '</pre>';
     }
 
 
@@ -433,7 +433,7 @@ function wcps_slider_main_items($args)
         <div id="wcps-<?php echo esc_attr($wcps_id); ?>" class="<?php echo esc_attr($wcps_items_class); ?> splide" data-splide="<?php echo esc_attr(json_encode($sliderOptions)) ?>">
 
 
-            <div class="splide__arrows <?php echo esc_attr($navigation_position); ?> <?php echo $navigation_style; ?>">
+            <div class="splide__arrows <?php echo esc_attr($navigation_position); ?> <?php echo esc_attr($navigation_style); ?>">
                 <div class='prev splide__arrow splide__arrow--prev'>
 
                     <?php if ($prevIconPosition == 'before') : ?>
@@ -503,7 +503,7 @@ function wcps_slider_main_items($args)
                         $loop_count++;
                     endwhile;
 
-                    wp_reset_query();
+                    wp_reset_postdata();
                     ?>
                 </ul>
             </div>
@@ -726,7 +726,7 @@ function wcps_slider_main_items_orders($args)
 
     if (in_array('query_args', $developer_options)) {
         echo 'query_args: ############';
-        echo '<pre>' . var_export($query_args, true) . '</pre>';
+        echo '<pre>' . esc_html(var_export($query_args, true)) . '</pre>';
     }
 
 
@@ -737,7 +737,7 @@ function wcps_slider_main_items_orders($args)
     if (in_array('found_posts', $developer_options)) {
 
         echo 'found_posts: ############';
-        echo '<pre>' . var_export(((int) $wcps_query->found_posts), true) . '</pre>';
+        echo '<pre>' . esc_html(var_export(((int) $wcps_query->found_posts), true)) . '</pre>';
     }
 
 
@@ -766,7 +766,7 @@ function wcps_slider_main_items_orders($args)
                 $loop_count++;
             endwhile;
 
-            wp_reset_query();
+            wp_reset_postdata();
             ?>
         </div>
 
@@ -1038,7 +1038,7 @@ function wcps_slider_main_items_dokan_vendors($args)
         <div id="wcps-<?php echo esc_attr($wcps_id); ?>" class="<?php echo esc_attr($wcps_items_class); ?> splide" data-splide="<?php echo esc_attr(json_encode($sliderOptions)) ?>">
 
 
-            <div class="splide__arrows <?php echo esc_attr($navigation_position); ?> <?php echo $navigation_style; ?>">
+            <div class="splide__arrows <?php echo esc_attr($navigation_position); ?> <?php echo esc_attr($navigation_style); ?>">
                 <div class='prev splide__arrow splide__arrow--prev'>
 
                     <?php if ($prevIconPosition == 'before') : ?>
@@ -1310,7 +1310,7 @@ function wcps_slider_main_items_categories($args)
         <div id="wcps-<?php echo esc_attr($wcps_id); ?>" class="<?php echo esc_attr($wcps_items_class); ?> splide" data-splide="<?php echo esc_attr(json_encode($sliderOptions)) ?>">
 
 
-            <div class="splide__arrows <?php echo esc_attr($navigation_position); ?> <?php echo $navigation_style; ?>">
+            <div class="splide__arrows <?php echo esc_attr($navigation_position); ?> <?php echo esc_attr($navigation_style); ?>">
                 <div class='prev splide__arrow splide__arrow--prev'>
 
                     <?php if ($prevIconPosition == 'before') : ?>
@@ -1586,8 +1586,8 @@ function wcps_slider_main_scripts_slick($args)
                 ],
                 arrows: <?php echo esc_attr($slider_navigation); ?>,
                 appendArrows: '.controlsWrap-<?php echo esc_attr($wcps_id); ?>',
-                prevArrow: `<div class=" prev "><?php echo wp_specialchars_decode($navigation_text_prev, ENT_QUOTES); ?></div>`,
-                nextArrow: `<div class="next"><?php echo wp_specialchars_decode($navigation_text_next, ENT_QUOTES); ?></div>`,
+                prevArrow: `<div class=" prev "><?php echo wp_kses_post(wp_specialchars_decode($navigation_text_prev, ENT_QUOTES)); ?></div>`,
+                nextArrow: `<div class="next"><?php echo wp_kses_post(wp_specialchars_decode($navigation_text_next, ENT_QUOTES)); ?></div>`,
                 speed: <?php echo esc_attr($auto_play_speed); ?>,
                 autoplay: <?php echo esc_attr($slider_auto_play); ?>,
                 autoplaySpeed: <?php echo esc_attr($auto_play_timeout); ?>,
@@ -1603,7 +1603,7 @@ function wcps_slider_main_scripts_slick($args)
 
 
 
-            $('#wcps-container-<?php echo esc_attr($wcps_id) . ' .controlsWrap'; ?> ').addClass('<?php echo esc_attr($navigation_position); ?> <?php echo $navigation_style; ?>');
+            $('#wcps-container-<?php echo esc_js($wcps_id) . ' .controlsWrap'; ?> ').addClass('<?php echo esc_js($navigation_position); ?> <?php echo esc_js($navigation_style); ?>');
 
             $(document).on('change', '#wcps-<?php echo esc_attr($wcps_id) . ' .wcps-items-cart .quantity'; ?> ', function() {
                 quantity = $(this).val();

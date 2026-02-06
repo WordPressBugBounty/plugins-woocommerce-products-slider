@@ -31,19 +31,30 @@ class class_wcps_post_types
                     'name'                     => $plural,
                     'singular_name'         => $singular,
                     'menu_name'             => $singular,
+                    /* translators: %s is post type name in plural */
                     'all_items'             => sprintf(__('All %s', 'woocommerce-products-slider'), $plural),
                     'add_new'                 => __('Add New', 'woocommerce-products-slider'),
+                    /* translators: %s is post type name in plural */
                     'add_new_item'             => sprintf(__('Add %s', 'woocommerce-products-slider'), $singular),
                     'edit'                     => __('Edit', 'woocommerce-products-slider'),
+                    /* translators: %s is post type name in plural */
                     'edit_item'             => sprintf(__('Edit %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'new_item'                 => sprintf(__('New %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'view'                     => sprintf(__('View %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'view_item'             => sprintf(__('View %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'search_items'             => sprintf(__('Search %s', 'woocommerce-products-slider'), $plural),
+                    /* translators: %s is post type name in plural */
                     'not_found'             => sprintf(__('No %s found', 'woocommerce-products-slider'), $plural),
+                    /* translators: %s is post type name in plural */
                     'not_found_in_trash'     => sprintf(__('No %s found in trash', 'woocommerce-products-slider'), $plural),
+                    /* translators: %s is post type name in plural */
                     'parent'                 => sprintf(__('Parent %s', 'woocommerce-products-slider'), $singular)
                 ),
+                /* translators: %s is post type name in plural */
                 'description' => sprintf(__('This is where you can create and manage %s.', 'woocommerce-products-slider'), $plural),
                 'public'                 => false,
                 'show_ui'                 => true,
@@ -83,19 +94,30 @@ class class_wcps_post_types
                     'name'                     => $plural,
                     'singular_name'         => $singular,
                     'menu_name'             => $singular,
+                    /* translators: %s is post type name in plural */
                     'all_items'             => sprintf(__('All %s', 'woocommerce-products-slider'), $plural),
                     'add_new'                 => __('Add New', 'woocommerce-products-slider'),
+                    /* translators: %s is post type name in plural */
                     'add_new_item'             => sprintf(__('Add %s', 'woocommerce-products-slider'), $singular),
                     'edit'                     => __('Edit', 'woocommerce-products-slider'),
+                    /* translators: %s is post type name in plural */
                     'edit_item'             => sprintf(__('Edit %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'new_item'                 => sprintf(__('New %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'view'                     => sprintf(__('View %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'view_item'             => sprintf(__('View %s', 'woocommerce-products-slider'), $singular),
+                    /* translators: %s is post type name in plural */
                     'search_items'             => sprintf(__('Search %s', 'woocommerce-products-slider'), $plural),
+                    /* translators: %s is post type name in plural */
                     'not_found'             => sprintf(__('No %s found', 'woocommerce-products-slider'), $plural),
+                    /* translators: %s is post type name in plural */
                     'not_found_in_trash'     => sprintf(__('No %s found in trash', 'woocommerce-products-slider'), $plural),
+                    /* translators: %s is post type name in plural */
                     'parent'                 => sprintf(__('Parent %s', 'woocommerce-products-slider'), $singular)
                 ),
+                /* translators: %s is post type name in plural */
                 'description' => sprintf(__('This is where you can create and manage %s.', 'woocommerce-products-slider'), $plural),
                 'public'                 => false,
                 'show_ui'                 => true,

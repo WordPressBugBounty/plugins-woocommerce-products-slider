@@ -6,7 +6,7 @@ add_action('wcps_builder_viewFilterable', 'wcps_builder_viewFilterable', 5, 2);
 function wcps_builder_viewFilterable($post_id, $PostGridData)
 {
 
-    global $PostGridBuilderCss;
+    global $WCPSBuilderCss;
 
 
     $globalOptions = isset($PostGridData["globalOptions"]) ? $PostGridData["globalOptions"] : [];
@@ -168,20 +168,20 @@ function wcps_builder_viewFilterable($post_id, $PostGridData)
                 <div class="filterable-group" data-filter-group data-logic="<?php echo esc_attr($groupLogic); ?>">
                     <?php if ($filterableShowSort == 'yes') : ?>
                         <span class="pg-filter pg-filter-<?php echo esc_attr($post_id); ?>" data-sort="order:asc">
-                            <?php echo __('ASC', 'combo-blocks'); ?>
+                            <?php echo esc_html__('ASC', 'woocommerce-products-slider'); ?>
                         </span>
                         <span class="pg-filter pg-filter-<?php echo esc_attr($post_id); ?>" data-sort="order:desc">
-                            <?php echo __('DESC', 'combo-blocks'); ?>
+                            <?php echo esc_html__('DESC', 'woocommerce-products-slider'); ?>
                         </span>
                     <?php endif; ?>
                     <?php if ($filterableShowRandom == 'yes') : ?>
                         <span class="pg-filter pg-filter-<?php echo esc_attr($post_id); ?>" data-sort="random">
-                            <?php echo __('Random', 'combo-blocks'); ?>
+                            <?php echo esc_html__('Random', 'woocommerce-products-slider'); ?>
                         </span>
                     <?php endif; ?>
                     <?php if (count($filterableFilters) > 1 && $filterableShowClear == 'yes') : ?>
                         <button class="pg-filter" type="reset">
-                            <?php echo __('Clear', 'combo-blocks'); ?>
+                            <?php echo esc_html__('Clear', 'woocommerce-products-slider'); ?>
                         </button>
                     <?php endif; ?>
                 </div>
@@ -192,7 +192,7 @@ function wcps_builder_viewFilterable($post_id, $PostGridData)
         <div class="items">
             <?php
 
-            echo $postsHtml;
+            echo wp_kses_post($postsHtml);
 
             ?>
         </div>
